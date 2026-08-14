@@ -1,0 +1,33 @@
+{
+  "name": "@jomashopio/nurix-typebot-forge-block-source",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Canonical source and submission tooling for the Nurix Chat Typebot Forge block",
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "build:test": "tsc",
+    "check": "npm run security:check && npm run format:check && npm run typecheck && npm test",
+    "format": "biome check --write .",
+    "format:check": "biome check .",
+    "security:check": "node scripts/check-repository.mjs",
+    "test": "npm run build:test && node --test \"dist-test/test/*.test.js\" \"test/*.test.mjs\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jomashopio/nurix-typebot-forge-block.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jomashopio/nurix-typebot-forge-block/issues"
+  },
+  "homepage": "https://github.com/jomashopio/nurix-typebot-forge-block#readme",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@biomejs/biome": "2.5.8",
+    "@types/node": "24.13.3",
+    "typescript": "7.0.2"
+  }
+}

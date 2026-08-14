@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmitOnError": true,
+    "outDir": "dist-test",
+    "rootDir": ".",
+    "strict": true,
+    "target": "ES2024",
+    "types": ["node"],
+    "verbatimModuleSyntax": true
+  },
+  "include": [
+    "packages/forge/blocks/nurixChat/src/sendNurixChatMessage.ts",
+    "packages/forge/blocks/nurixChat/src/mapNurixChatResponse.ts",
+    "packages/forge/blocks/nurixChat/src/types.ts",
+    "test/**/*.test.ts"
+  ]
+}

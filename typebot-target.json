@@ -1,0 +1,5 @@
+{
+  "repository": "https://github.com/baptisteArno/typebot.io",
+  "baseCommit": "248433dd8dd460bd91870a8897ad5288aa131416",
+  "destination": "packages/forge/blocks/nurixChat"
+}
