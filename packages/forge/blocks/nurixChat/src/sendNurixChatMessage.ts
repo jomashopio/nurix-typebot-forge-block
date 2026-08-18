@@ -10,6 +10,8 @@ import {
   type SendNurixChatMessageInput,
 } from "./types";
 
+const conversationStatePattern = /^[a-z][a-z0-9_-]{0,63}$/;
+
 export const sendNurixChatMessage = async (
   input: SendNurixChatMessageInput,
   dependencies: SendNurixChatMessageDependencies = {},
@@ -95,14 +97,21 @@ const readJsonResponse = async (response: Response): Promise<unknown> => {
 const parseSuccessResponse = (payload: unknown): NurixChatResponse => {
   const content = readString(payload, "content", true, 10_000);
   const conversationId = readString(payload, "conversationId", false, 512);
+  const conversationState = readConversationState(payload);
   const messageId = readString(payload, "messageId", false, 512);
   if (
     content === undefined ||
     conversationId === undefined ||
+    conversationState === undefined ||
     messageId === undefined
   )
     throw protocolError();
-  return Object.freeze({ content, conversationId, messageId });
+  return Object.freeze({
+    content,
+    conversationId,
+    conversationState,
+    messageId,
+  });
 };
 
 const parseErrorResponse = (status: number, payload: unknown) => {
@@ -149,6 +158,15 @@ const readBoolean = (value: unknown, key: string): boolean | undefined => {
   if (typeof value !== "object" || value === null) return undefined;
   const field = Reflect.get(value, key);
   return typeof field === "boolean" ? field : undefined;
+};
+
+const readConversationState = (value: unknown): string | undefined => {
+  if (typeof value !== "object" || value === null) return undefined;
+  if (!Object.hasOwn(value, "conversationState")) return "active";
+  const field = Reflect.get(value, "conversationState");
+  return typeof field === "string" && conversationStatePattern.test(field)
+    ? field
+    : undefined;
 };
 
 const protocolError = () =>

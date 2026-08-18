@@ -34,9 +34,15 @@ The `Send Message` action requires:
   a variable and preserve it across retries.
 
 The action sends exactly one HTTPS request and never retries automatically. It maps
-the returned message, conversation ID, and message ID into Typebot variables. The
-private adapter gateway secret is injected by the hosted ingress and is never sent
-by this block.
+the returned message, conversation ID, message ID, and conversation state into
+Typebot variables. Typebot flows can use the normalized conversation state in a
+Condition block to continue, finish, or hand off a conversation. The private
+adapter gateway secret is injected by the hosted ingress and is never sent by this
+block.
+
+Branch explicitly on `active`, `completed`, and `handoff`. Route unknown future
+tokens to a safe fallback group instead of treating every non-terminal value as
+active.
 
 ## Submission status
 

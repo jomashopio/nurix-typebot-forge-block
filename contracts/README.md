@@ -21,6 +21,13 @@ Content-Type: application/json
 }
 ```
 
-Success is `{ "content", "conversationId", "messageId" }`. Errors use the
-adapter's sanitized `{ "error": { "code", "message", "safeToRetry", "requestId" } }`
-envelope. The block performs no automatic retry, regardless of status or error code.
+Success is
+`{ "content", "conversationId", "messageId", "conversationState" }`.
+`conversationState` is a required lowercase state token of 1–64 characters,
+matching `^[a-z][a-z0-9_-]{0,63}$`. The block temporarily defaults an omitted
+field to `active` so it remains compatible during adapter rollout; a present but
+invalid value is a protocol error.
+
+Errors use the adapter's sanitized
+`{ "error": { "code", "message", "safeToRetry", "requestId" } }` envelope. The
+block performs no automatic retry, regardless of status or error code.
