@@ -27,19 +27,16 @@ describe("sendNurixChatMessage", () => {
       });
     };
 
-    await expect(
-      sendNurixChatMessage(input, {
-        endpoint: "https://adapter.test.invalid/v1/messages",
-        fetcher,
-      }),
-    ).resolves.toEqual({
+    await expect(sendNurixChatMessage(input, { fetcher })).resolves.toEqual({
       content: "Synthetic reply",
       conversationId: "conversation-1",
       messageId: "message-1",
     });
 
     expect(calls).toHaveLength(1);
-    expect(calls[0]?.input).toBe("https://adapter.test.invalid/v1/messages");
+    expect(calls[0]?.input).toBe(
+      "https://nurix-typebot-adapter-2eazj.ondigitalocean.app/v1/messages",
+    );
     expect(calls[0]?.init?.method).toBe("POST");
     expect(calls[0]?.init?.redirect).toBe("error");
     const headers = new Headers(calls[0]?.init?.headers);

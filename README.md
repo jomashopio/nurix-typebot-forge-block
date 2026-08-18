@@ -40,11 +40,10 @@ by this block.
 
 ## Submission status
 
-The adapter hostname in `constants.ts` deliberately uses `.example.invalid` until
-the reviewed Nurix-hosted endpoint is deployed. Replace it with the fixed HTTPS
-production origin before syncing a release candidate or opening the Typebot PR.
-An arbitrary user-configurable endpoint is intentionally not supported because it
-would create a server-side request-forgery surface in Typebot.
+The block is pinned to the reviewed Nurix-hosted endpoint at
+`https://nurix-typebot-adapter-2eazj.ondigitalocean.app/v1/messages`. An arbitrary
+user-configurable endpoint is intentionally not supported because it would create
+a server-side request-forgery surface in Typebot.
 
 Typebot requires official blocks to live inside its monorepo. This repository is
 the canonical source, but the final contribution must be synchronized into

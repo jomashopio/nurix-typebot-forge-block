@@ -1,7 +1,8 @@
 # Typebot submission checklist
 
 1. Open and obtain agreement on a Typebot GitHub issue before submitting code.
-2. Replace the `.example.invalid` adapter URL with the reviewed fixed HTTPS endpoint.
+2. Confirm the fixed adapter URL is
+   `https://nurix-typebot-adapter-2eazj.ondigitalocean.app/v1/messages`.
 3. Confirm the Nurix logo and contribution license are approved.
 4. Run `node scripts/sync-to-typebot.mjs <typebot-checkout>` from this repository.
 5. In the Typebot checkout, run:
