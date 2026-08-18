@@ -27,10 +27,7 @@ test("sends the exact adapter request once without the private gateway header", 
     });
   };
 
-  const response = await sendNurixChatMessage(input, {
-    endpoint: "https://adapter.test.invalid/v1/messages",
-    fetcher,
-  });
+  const response = await sendNurixChatMessage(input, { fetcher });
 
   assert.deepEqual(response, {
     content: "Synthetic reply",
@@ -38,7 +35,10 @@ test("sends the exact adapter request once without the private gateway header", 
     messageId: "message-1",
   });
   assert.equal(calls.length, 1);
-  assert.equal(calls[0]?.input, "https://adapter.test.invalid/v1/messages");
+  assert.equal(
+    calls[0]?.input,
+    "https://nurix-typebot-adapter-2eazj.ondigitalocean.app/v1/messages",
+  );
   assert.equal(calls[0]?.init?.method, "POST");
   assert.equal(calls[0]?.init?.redirect, "error");
   const headers = new Headers(calls[0]?.init?.headers);
