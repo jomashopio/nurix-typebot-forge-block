@@ -23,6 +23,7 @@ test("sends the exact adapter request once without the private gateway header", 
     return jsonResponse({
       content: "Synthetic reply",
       conversationId: "conversation-1",
+      conversationState: "completed",
       messageId: "message-1",
     });
   };
@@ -32,6 +33,7 @@ test("sends the exact adapter request once without the private gateway header", 
   assert.deepEqual(response, {
     content: "Synthetic reply",
     conversationId: "conversation-1",
+    conversationState: "completed",
     messageId: "message-1",
   });
   assert.equal(calls.length, 1);
@@ -51,6 +53,49 @@ test("sends the exact adapter request once without the private gateway header", 
     userId: input.userId,
     message: input.message,
   });
+});
+
+test("defaults an absent conversation state to active", async () => {
+  const fetcher = async () =>
+    jsonResponse({
+      content: "Synthetic reply",
+      conversationId: "conversation-1",
+      messageId: "message-1",
+    });
+
+  assert.deepEqual(await sendNurixChatMessage(input, { fetcher }), {
+    content: "Synthetic reply",
+    conversationId: "conversation-1",
+    conversationState: "active",
+    messageId: "message-1",
+  });
+});
+
+test("rejects a malformed present conversation state", async () => {
+  for (const conversationState of [
+    "",
+    "Completed",
+    " active",
+    "active.now",
+    "a".repeat(65),
+    1,
+    null,
+  ]) {
+    await assert.rejects(
+      sendNurixChatMessage(input, {
+        fetcher: async () =>
+          jsonResponse({
+            content: "Synthetic reply",
+            conversationId: "conversation-1",
+            conversationState,
+            messageId: "message-1",
+          }),
+      }),
+      (error) =>
+        error instanceof NurixAdapterError &&
+        error.code === "NURIX_PROTOCOL_ERROR",
+    );
+  }
 });
 
 test("does not retry and does not expose credentials from a network failure", async () => {

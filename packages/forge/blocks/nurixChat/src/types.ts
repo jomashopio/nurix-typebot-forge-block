@@ -1,6 +1,7 @@
 export type NurixChatResponse = Readonly<{
   content: string;
   conversationId: string;
+  conversationState: string;
   messageId: string;
 }>;
 

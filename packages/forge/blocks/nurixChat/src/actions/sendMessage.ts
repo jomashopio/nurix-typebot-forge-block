@@ -40,7 +40,12 @@ export const sendMessage = createAction({
       },
     }),
     responseMapping: option
-      .saveResponseArray(["Message", "Conversation ID", "Message ID"])
+      .saveResponseArray([
+        "Message",
+        "Conversation ID",
+        "Message ID",
+        "Conversation state",
+      ])
       .meta({
         layout: {
           accordion: "Save response",

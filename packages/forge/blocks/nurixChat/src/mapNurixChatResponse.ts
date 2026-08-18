@@ -14,5 +14,9 @@ export const mapNurixChatResponse = (
       return [{ id: mapping.variableId, value: response.conversationId }];
     if (mapping.item === "Message ID")
       return [{ id: mapping.variableId, value: response.messageId }];
-    return [{ id: mapping.variableId, value: response.content }];
+    if (mapping.item === "Conversation state")
+      return [{ id: mapping.variableId, value: response.conversationState }];
+    if (mapping.item === "Message")
+      return [{ id: mapping.variableId, value: response.content }];
+    return [];
   }) ?? [];

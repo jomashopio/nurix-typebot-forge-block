@@ -23,6 +23,7 @@ describe("sendNurixChatMessage", () => {
       return jsonResponse({
         content: "Synthetic reply",
         conversationId: "conversation-1",
+        conversationState: "completed",
         messageId: "message-1",
       });
     };
@@ -30,6 +31,7 @@ describe("sendNurixChatMessage", () => {
     await expect(sendNurixChatMessage(input, { fetcher })).resolves.toEqual({
       content: "Synthetic reply",
       conversationId: "conversation-1",
+      conversationState: "completed",
       messageId: "message-1",
     });
 
@@ -49,6 +51,47 @@ describe("sendNurixChatMessage", () => {
       userId: input.userId,
       message: input.message,
     });
+  });
+
+  it("defaults an absent conversation state to active", async () => {
+    const fetcher = async () =>
+      jsonResponse({
+        content: "Synthetic reply",
+        conversationId: "conversation-1",
+        messageId: "message-1",
+      });
+
+    await expect(sendNurixChatMessage(input, { fetcher })).resolves.toEqual({
+      content: "Synthetic reply",
+      conversationId: "conversation-1",
+      conversationState: "active",
+      messageId: "message-1",
+    });
+  });
+
+  it("rejects a malformed present conversation state", async () => {
+    for (const conversationState of [
+      "",
+      "Completed",
+      " active",
+      "active.now",
+      "a".repeat(65),
+      1,
+      null,
+    ]) {
+      const error = await captureError(
+        sendNurixChatMessage(input, {
+          fetcher: async () =>
+            jsonResponse({
+              content: "Synthetic reply",
+              conversationId: "conversation-1",
+              conversationState,
+              messageId: "message-1",
+            }),
+        }),
+      );
+      expect(error.code).toBe("NURIX_PROTOCOL_ERROR");
+    }
   });
 
   it("does not retry or expose credentials after a network failure", async () => {

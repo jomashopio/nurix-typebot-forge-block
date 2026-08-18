@@ -20,6 +20,12 @@ test("synchronizes a Typebot checkout idempotently and fails on changed anchors"
   );
   await syncToTypebot(directory);
   await verifyTypebotSync(directory);
+  const synchronizedActionPath = path.join(
+    directory,
+    "packages/forge/blocks/nurixChat/src/actions/sendMessage.ts",
+  );
+  const synchronizedAction = await readFile(synchronizedActionPath, "utf8");
+  assert.match(synchronizedAction, /"Conversation state"/);
   assert.equal(
     await readFile(
       path.join(directory, "packages/forge/repository/package.json"),
@@ -28,6 +34,13 @@ test("synchronizes a Typebot checkout idempotently and fails on changed anchors"
     firstPackageJson,
   );
   assert.match(firstPackageJson, /@typebot\.io\/nurix-chat-block/);
+
+  await writeFile(
+    synchronizedActionPath,
+    synchronizedAction.replace('"Conversation state"', '"Conversation status"'),
+  );
+  await assert.rejects(verifyTypebotSync(directory), /does not match/);
+  await syncToTypebot(directory);
 
   await writeFile(
     path.join(directory, "packages/forge/repository/src/constants.ts"),
