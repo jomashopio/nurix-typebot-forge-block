@@ -2,13 +2,13 @@ import {
   maxAdapterResponseBytes,
   nurixAdapterMessagesUrl,
   nurixAdapterRequestTimeoutMs,
-} from "./constants.js";
+} from "./constants";
 import {
   NurixAdapterError,
   type NurixChatResponse,
   type SendNurixChatMessageDependencies,
   type SendNurixChatMessageInput,
-} from "./types.js";
+} from "./types";
 
 export const sendNurixChatMessage = async (
   input: SendNurixChatMessageInput,

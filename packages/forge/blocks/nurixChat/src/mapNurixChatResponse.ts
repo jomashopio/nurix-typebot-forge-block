@@ -2,7 +2,7 @@ import type {
   NurixChatResponse,
   NurixResponseMapping,
   NurixVariableUpdate,
-} from "./types.js";
+} from "./types";
 
 export const mapNurixChatResponse = (
   response: NurixChatResponse,
